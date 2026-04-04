@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco's GALLERY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #5a5a5a; 
@@ -15,7 +18,8 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: "Hiragino Mincho ProN", "MS PMincho", serif;
+            /* Noto Serif JP を優先的に適用するように変更 */
+            font-family: 'Noto Serif JP', "Hiragino Mincho ProN", "MS PMincho", serif;
             margin: 0;
             padding: 30px 15px; /* PORTFOLIO上の空間調整 */
             line-height: 1.6;
@@ -30,8 +34,8 @@
         h1 { 
             margin: 0;
             font-size: 1.8rem; 
-            letter-spacing: 1em; /* 設定した値 */
-            text-indent: 0.5em;    /* letter-spacingと同じ値を足すと、中央に揃います */
+            letter-spacing: 0.7em; /* 設定した値 */
+            text-indent: 0.7em;    /* letter-spacingと同じ値を足すと、中央に揃います */
             font-weight: 400;
             border-bottom: 1px solid rgba(255,255,255,0.3);
             display: inline-block;
