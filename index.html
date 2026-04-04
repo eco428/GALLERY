@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco's GALLERY</title>
+    <style>
+        :root {
+            --bg-color: #5a5a5a; 
+            --card-bg: #000000; /* 余白を黒にするため、カード背景を黒に */
+            --text-color: #f5f5f5;
+            --accent-color: #1da1f2;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: "Hiragino Mincho ProN", "MS PMincho", serif;
+            margin: 0;
+            padding: 30px 15px; /* PORTFOLIO上の空間調整 */
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        h1 { 
+            margin: 0;
+            font-size: 1.8rem; 
+            letter-spacing: 0.5em; /* 設定した値 */
+            text-indent: 0.5em;    /* letter-spacingと同じ値を足すと、中央に揃います */
+            font-weight: 400;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        h2 { 
+            border-left: 2px solid var(--accent-color);
+            padding-left: 15px;
+            margin: 20px auto 10px;
+            max-width: 1400px;
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+        }
+
+        h2:first-of-type { margin-top: 0; }
+
+        /* --- レスポンシブ・グリッド設定 --- */
+        .gallery {
+            display: grid;
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto 40px;
+            /* デフォルト（PC）は5列 */
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        /* 画面幅 1200px以下：4列 */
+        @media (max-width: 1200px) {
+            .gallery { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        /* 画面幅 992px以下：3列 */
+        @media (max-width: 992px) {
+            .gallery { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* 画面幅 768px以下（スマホ）：2列 */
+        @media (max-width: 768px) {
+            .gallery { 
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            /* スマホでも縦長を維持。PC設定が継承されますが明示しておきます */
+            .gallery-item { aspect-ratio: 2 / 3; } 
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.1rem; }
+        }
+
+        .gallery-item {
+            background: var(--card-bg);
+            /* ★ここを変更：√2（日本のA4/B5サイズなどの雑誌比率）に変更（横1:縦√2） */
+            aspect-ratio: 1 / 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* ★重要：縮小して全体を表示（余白は黒） */
+            display: block;
+            filter: grayscale(15%);
+            transition: 0.4s;
+        }
+
+        .gallery-item:hover img { filter: grayscale(0%); }
+
+        /* モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 15, 15, 0.96);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 550px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px; right: 30px;
+            color: #fff;
+            font-size: 50px;
+            cursor: pointer;
+            font-family: sans-serif;
+            line-height: 1;
+        }
+
+        /* --- フッター設定 --- */
+        footer {
+            text-align: center;
+            padding: 60px 0 30px; /* 上に余白を持たせて作品と離す */
+            font-size: 0.8rem;
+        }
+
+        .disclaimer {
+            font-size: 0.65rem;     /* 注意書きをさらに小さく */
+            opacity: 0.6;           /* 少し薄くして控えめに */
+            margin-bottom: 10px;    /* コピーライトとの間隔 */
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>GALLERY</h1>
+</header>
+
+<h2>Poster</h2>
+<div class="gallery">
+    <div class="gallery-item" onclick="openModal('2032805662997230068')"><img src="images/Poster12.png"></div>
+    <div class="gallery-item" onclick="openModal('2020483503456985421')"><img src="images/Poster11_Valentine.png"></div>
+    <div class="gallery-item" onclick="openModal('2020487324543467597')"><img src="images/Poster10_Yaichiro2.png"></div>
+    <div class="gallery-item" onclick="openModal('1942630505071141115')"><img src="images/Poster09_BMC2.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1942630498028995009')"><img src="images/Poster09_BMC1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1922687044620276143')"><img src="images/Poster08_KKRK.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1920568174111605124')"><img src="images/Poster07_CarrGacha.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1860513089957036282')"><img src="images/Poster06_Yaichiro.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1859660223142941114')"><img src="images/Poster05_Megu.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1825223813791178993')"><img src="images/Poster04_ShanaoR_Op.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1772174493949034611')"><img src="images/Poster03_conflict.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1771099836042940914')"><img src="images/Poster02_Band.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1771099836042940914')"><img src="images/Poster01_Cigarette.jpg"></div>
+</div>
+
+<h2>Book</h2>
+<div class="gallery">
+    <div class="gallery-item" onclick="openModal('1971885329109090400')"><img src="images/BOOK03_OKWPB.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1953117816326111625')"><img src="images/BOOK02_Broccoli_Rule.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1824812019855618494')"><img src="images/BOOK01_BS.jpg"></div>
+</div>
+
+<h2>Parody</h2>
+<div class="gallery">
+    <div class="gallery-item" onclick="openModal('2035648880579375414')"><img src="images/BOOK04_IidaBunko.png"></div>
+    <div class="gallery-item" onclick="openModal('1974891281257267699')"><img src="images/Magazine18_OKW.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1908588521172222450')"><img src="images/Magazine17_Van.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1908588521172222450')"><img src="images/Magazine16_Cosa.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1908458572658225608')"><img src="images/Magazine15_Rurupu.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1908458572658225608')"><img src="images/Magazine14_Noo.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1951747715748241737')"><img src="images/Magazine13_Giova.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1901450916089471309')"><img src="images/Magazine12_T3.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1880304409999208460')"><img src="images/Magazine11_B_F.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1832890111723450480')"><img src="images/Magazine10_YZ.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1832890111723450480')"><img src="images/Magazine10_JS.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1822837941305266422')"><img src="images/Magazine09_Natal.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1812717484656721926')"><img src="images/Magazine08_Dayo.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1803337441576988732')"><img src="images/Magazine07_Ichika.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1797219437470421272')"><img src="images/Magazine06_Kimitosu.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1794269931317669897')"><img src="images/Magazine05_Layla.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1794269931317669897')"><img src="images/Magazine04_Kain.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1787745864926330955')"><img src="images/Magazine03_ZY_YR.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1784842094802276806')"><img src="images/Magazine02_RW2.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1784842094802276806')"><img src="images/Magazine02_RW1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1781503052748640673')"><img src="images/Magazine01_VD3.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1781503052748640673')"><img src="images/Magazine01_VD2.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1781503052748640673')"><img src="images/Magazine01_VD1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1882124956940849535')"><img src="images/Gazo22_SHIROKUMAX.png"></div>
+    <div class="gallery-item" onclick="openModal('1850602506495328700')"><img src="images/Gazo17_YOPPY.png"></div>
+    <div class="gallery-item" onclick="openModal('1832337827818041379')"><img src="images/Gazo15_OCEAN'S11.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1823823230031069562')"><img src="images/Gazo13_bucci-tie.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1809898381403455930')"><img src="images/Gazo05_StreetFighter6.jpg"></div>
+</div>
+
+<h2>Digital Art</h2>
+<div class="gallery">
+    <div class="gallery-item" onclick="openModal('2032810412513882191')"><img src="images/Gazo01_CSB9.png"></div>
+    <div class="gallery-item" onclick="openModal('2023037248841842838')"><img src="images/Gazo28_casino.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1929195826464620677')"><img src="images/Gazo26_Memory03.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1929191125249577065')"><img src="images/Gazo25_Memory02.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1926324504189366385')"><img src="images/Gazo24_HBD2025.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1925282919402414084')"><img src="images/Gazo01_CSB8-2.png"></div>
+    <div class="gallery-item" onclick="openModal('1925282919402414084')"><img src="images/Gazo01_CSB8-1.png"></div>
+    <div class="gallery-item" onclick="openModal('1903506526805061751')"><img src="images/Gazo27_Yaichiro_HBD2025.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1903357985440887149')"><img src="images/Gazo23_MOZU_SWEETS1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1868704903155401059')"><img src="images/Gazo21_Arayotto_Chawan.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1868704903155401059')"><img src="images/Gazo21_Arayotto_Tenugui.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1864082187873591549')"><img src="images/Gazo20_Bottle1.png"></div>
+    <div class="gallery-item" onclick="openModal('1864082187873591549')"><img src="images/Gazo20_Bottle2.png"></div>
+    <div class="gallery-item" onclick="openModal('1852799561578004659')"><img src="images/Gazo19_CD2.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1852798479602757955')"><img src="images/Gazo18_CD1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1834916831519555756')"><img src="images/Gazo16_DogTag.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1829258637094871127')"><img src="images/Gazo14_STGR_2nd.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1820097636755820710')"><img src="images/Gazo12_Akiba.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1818686220635099352')"><img src="images/Gazo11_VD6.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1817642873749430717')"><img src="images/Gazo10_VD5.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1815552411949203852')"><img src="images/Gazo09_VD4.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1814782339144425747')"><img src="images/Gazo08_VD3.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1819784149739454816')"><img src="images/Gazo07_VD2.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1811233954638270821')"><img src="images/Gazo06_VD1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1914352429384229106')"><img src="images/Gazo04_FC.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1796917481313087552')"><img src="images/Gazo03_MOZU20240517.png"></div>
+    <div class="gallery-item" onclick="openModal('1792946690171015525')"><img src="images/Gazo02_VD_HBD2024.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1802468588726673699')"><img src="images/Gazo01_CSB7.png"></div>
+    <div class="gallery-item" onclick="openModal('1782937532868784556')"><img src="images/Gazo01_CSB6.png"></div>
+    <div class="gallery-item" onclick="openModal('1769591533643399364')"><img src="images/Gazo01_CSB5.png"></div>
+    <div class="gallery-item" onclick="openModal('1769590730018955634')"><img src="images/Gazo01_CSB4.png"></div>
+    <div class="gallery-item" onclick="openModal('1769589762632155642')"><img src="images/Gazo01_CSB3.png"></div>
+    <div class="gallery-item" onclick="openModal('1769588861163000164')"><img src="images/Gazo01_CSB2.png"></div>
+    <div class="gallery-item" onclick="openModal('1769588264518996087')"><img src="images/Gazo01_CSB1.png"></div>
+</div>
+
+<h2>Others</h2>
+<div class="gallery">
+    <div class="gallery-item" onclick="openModal('1961760467770335315')"><img src="images/Goods04_AK.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1958903074086342712')"><img src="images/Goods05_DT.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1953838783817728416')"><img src="images/Other_MOZU_logo.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1946199369813786706')"><img src="images/Goods02_Pen.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1937924775294472322')"><img src="images/Other_OKW_logo.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1931207602584846686')"><img src="images/Goods01_MOZU_Glass.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1857768077552910447')"><img src="images/Other_FS01_202411_2.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1857768077552910447')"><img src="images/Other_FS01_202411_1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1855150612587200596')"><img src="images/Other_Talking2.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1842421034458255544')"><img src="images/Other_Talking1.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1841557976030793916')"><img src="images/Other_MOZU_Skin.png"></div>
+    <div class="gallery-item" onclick="openModal('1830154810567614489')"><img src="images/Other_FS01_202408.png"></div>
+    <div class="gallery-item" onclick="openModal('1793296830547276287')"><img src="images/Other_Meishi_Bancho.jpg"></div>
+</div>
+
+<footer>
+    <p class="disclaimer">
+        当サイトの内容、テキスト、画像等の無断転載・無断使用を固く禁じます。<br>
+        また、まとめサイト等への引用を厳禁いたします。
+    </p>
+    &copy; 2026 Eco's GALLERY.
+</footer>
+
+<div id="myModal" class="modal">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <div class="modal-content" id="tweet-container"></div>
+</div>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script>
+    function openModal(id) {
+        const container = document.getElementById('tweet-container');
+        container.innerHTML = ''; 
+        document.getElementById('myModal').style.display = 'flex';
+        twttr.widgets.createTweet(id, container, { theme: 'dark', align: 'center', dnt: true });
+    }
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+        document.getElementById('tweet-container').innerHTML = '';
+    }
+    window.onclick = function(event) { if (event.target == document.getElementById('myModal')) closeModal(); }
+</script>
+
+</body>
+</html>
