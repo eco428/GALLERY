@@ -129,6 +129,7 @@
         }
 
         .modal-content {
+            box-sizing: border-box;
             background: #fff;
             padding: 10px;
             border-radius: 8px;
@@ -136,6 +137,49 @@
             width: 95%;
             max-height: 100vh;
             overflow-y: auto;
+        }
+
+
+        /* 年齢制限などでX埋め込みができない作品用 */
+        .fallback-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fallback-image {
+            display: block;
+            width: 100%;
+            max-height: calc(100vh - 150px);
+            max-height: calc(100dvh - 150px);
+            object-fit: contain;
+            border-radius: 4px;
+            background: #000;
+        }
+
+        .x-post-button {
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 52px;
+            padding: 12px 16px;
+            border-radius: 0;
+            background: #0f1419;
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .x-post-button:hover,
+        .x-post-button:focus-visible {
+            background: #272c30;
         }
 
         .close-btn {
@@ -187,8 +231,10 @@
 
 <h2>Book</h2>
 <div class="gallery">
+    <div class="gallery-item" onclick="openModal('2065075927349113003')"><img src="images/BOOK06_Score_vol1.png"></div>
+    <div class="gallery-item" onclick="openImageModal('images/BOOK05_Photo2.png', 'https://x.com/Eco_428/status/2058550882573378031')"><img src="images/BOOK05_Photo2.png" alt="レッサン・パンナ＆キラ・メキーラ 写真集表紙"></div>
     <div class="gallery-item" onclick="openModal('1971885329109090400')"><img src="images/BOOK03_OKWPB.jpg"></div>
-    <div class="gallery-item" onclick="openModal('1953117816326111625')"><img src="images/BOOK02_Broccoli_Rule.jpg"></div>
+    <div class="gallery-item" onclick="openModal('1953117816326111625')"><img src="images/BOOK02_Photo1.jpg"></div>
     <div class="gallery-item" onclick="openModal('1824812019855618494')"><img src="images/BOOK01_BS.jpg"></div>
 </div>
 
@@ -311,10 +357,41 @@
 <script>
     function openModal(id) {
         const container = document.getElementById('tweet-container');
-        container.innerHTML = ''; 
+        
+        container.innerHTML = `
+        <blockquote
+        class="twitter-tweet"
+        data-theme="dark"
+        data-align="center"
+        data-conversation="none"
+        data-dnt="true">
+        <a href="https://x.com/i/status/${id}"></a>
+        </blockquote>
+        `; 
         document.getElementById('myModal').style.display = 'flex';
-        twttr.widgets.createTweet(id, container, { theme: 'dark', align: 'center', dnt: true });
+        twttr.widgets.load(container);
     }
+    function openImageModal(imageSrc, postUrl) {
+        const container = document.getElementById('tweet-container');
+
+        container.innerHTML = `
+            <div class="fallback-modal">
+                <img
+                    class="fallback-image"
+                    src="${imageSrc}"
+                    alt="作品画像"
+                    onerror="this.style.display='none'">
+                <a
+                    class="x-post-button"
+                    href="${postUrl}"
+                    target="_blank"
+                    rel="noopener noreferrer">Xのポストを見る</a>
+            </div>
+        `;
+
+        document.getElementById('myModal').style.display = 'flex';
+    }
+
     function closeModal() {
         document.getElementById('myModal').style.display = 'none';
         document.getElementById('tweet-container').innerHTML = '';
